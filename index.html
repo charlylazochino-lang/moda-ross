@@ -88,7 +88,74 @@
         </div>
       </div>
     </div>
+<!-- =========================================================================
+         [SUBTÍTULO 3B]: SELECTOR DE MODO (CATÁLOGO / SUBASTA HASTA 22:00)
+         ========================================================================= -->
+    <div class="flex gap-2 bg-white p-1.5 rounded-2xl border border-pink-100 shadow-xs">
+      <button id="tabCatalogBtn" type="button" onclick="switchMode('catalog')" class="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 transition">
+        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+        <span>Catálogo Moda Ros</span>
+      </button>
+      <button id="tabAuctionBtn" type="button" onclick="switchMode('auction')" class="flex-1 py-2.5 px-3 rounded-xl text-purple-900 hover:bg-purple-50 font-extrabold text-xs flex items-center justify-center gap-1.5 transition">
+        <i data-lucide="gavel" class="w-4 h-4 text-pink-600"></i>
+        <span>Subasta (Cierra 22:00)</span>
+      </button>
+    </div>
 
+    <!-- =========================================================================
+         [SUBTÍTULO 3C]: SECCIÓN DE SUBASTA EXCLUSIVA (OCULTA POR DEFECTO)
+         ========================================================================= -->
+    <section id="auctionSection" class="hidden space-y-4">
+      <div class="bg-white rounded-3xl border border-pink-100 shadow-md overflow-hidden grid grid-cols-1 md:grid-cols-2">
+        <!-- Prenda exclusiva a subastar (edita aquí foto, título, precio base y descripción) -->
+        <div class="relative bg-slate-900">
+          <img id="auctionItemImg" src="https://images.unsplash.com/photo-1544923246-77307dd654cb?w=700&q=80" alt="Prenda Exclusiva en Subasta" class="w-full h-64 md:h-full object-cover">
+          <span class="absolute top-3 left-3 bg-purple-700 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow">
+            🔥 Pieza Exclusiva
+          </span>
+        </div>
+
+        <!-- Cronómetro, líder actual y formulario de puja -->
+        <div class="p-5 space-y-4">
+          <div class="flex items-center justify-between gap-2 bg-purple-50 border border-purple-100 rounded-2xl px-3.5 py-2.5">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-700 block">Cierre hoy a las 22:00</span>
+              <span id="auctionStatusBadge" class="text-xs font-bold text-emerald-700">Subasta activa</span>
+            </div>
+            <div id="auctionCountdown" class="font-mono font-black text-lg text-pink-600">00:00:00</div>
+          </div>
+
+          <div>
+            <h2 id="auctionItemTitle" class="font-extrabold text-lg text-slate-900">Chamarra Montañera Exclusiva Ed. Limitada</h2>
+            <p id="auctionItemDesc" class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Pieza única seleccionada de la colección. Puja más alto que la oferta actual antes de las 22:00.
+            </p>
+          </div>
+
+          <!-- Oferta líder visible al público -->
+          <div class="bg-pink-50/70 border border-pink-200 rounded-2xl p-3.5 space-y-1">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-pink-700 block">Oferta más alta actual</span>
+            <div class="flex items-baseline justify-between gap-2">
+              <span id="auctionHighestAmount" class="font-black text-2xl text-purple-950">Bs 20.00</span>
+              <span id="auctionHighestLeader" class="text-xs font-bold text-slate-700">Sin ofertas aún</span>
+            </div>
+          </div>
+
+          <!-- Formulario de puja (guarda en Google Sheets sin enviar WhatsApp en cada puja) -->
+          <form id="auctionBidForm" onsubmit="submitAuctionBid(event)" class="space-y-2.5">
+            <input id="bidderName" type="text" required placeholder="Tu nombre o apodo *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-pink-500 outline-none">
+            <div class="grid grid-cols-2 gap-2">
+              <input id="bidderPhone" type="tel" required placeholder="Tu WhatsApp (ej. 67335490) *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-pink-500 outline-none">
+              <input id="bidderAmount" type="number" step="1" min="1" required placeholder="Tu oferta en Bs *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-pink-500 outline-none">
+            </div>
+            <button id="auctionSubmitBtn" type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-95 text-white font-extrabold text-xs shadow-md transition">
+              Registrar Puja en Subasta
+            </button>
+            <p id="auctionFeedback" class="text-[11px] font-semibold text-slate-600 min-h-[16px]"></p>
+          </form>
+        </div>
+      </div>
+    </section>
     <!-- =========================================================================
          [SUBTÍTULO 4]: FILTROS DE CATEGORÍAS
          ========================================================================= -->
@@ -792,6 +859,172 @@
       document.getElementById('directWhatsappBtn').href = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', vengo de su catálogo web y tengo una consulta.')}`;
       renderProducts();
       renderCart();
+    });
+  </script>
+  <script>
+    const AUCTION_CONFIG = {
+      scriptUrl: "https://script.google.com/macros/s/AKfycbxCX1fGKulz8NGgxSkj9RXv8LbF6-ykgFZHcJ-TA0QJMQwkvk72qMTv_9xvz4j4tT0/exec",
+      basePrice: 20,
+      closeHour: 22,
+      closeMinute: 0
+    };
+
+    let currentHighestBid = AUCTION_CONFIG.basePrice;
+    let auctionTimerInterval = null;
+
+    function isAuctionClosed() {
+      const now = new Date();
+      const closeTime = new Date();
+      closeTime.setHours(AUCTION_CONFIG.closeHour, AUCTION_CONFIG.closeMinute, 0, 0);
+      return now >= closeTime;
+    }
+
+    function updateAuctionCountdown() {
+      const countdownEl = document.getElementById('auctionCountdown');
+      const statusEl = document.getElementById('auctionStatusBadge');
+      const submitBtn = document.getElementById('auctionSubmitBtn');
+      if (!countdownEl || !statusEl || !submitBtn) return;
+
+      const now = new Date();
+      const closeTime = new Date();
+      closeTime.setHours(AUCTION_CONFIG.closeHour, AUCTION_CONFIG.closeMinute, 0, 0);
+
+      if (now >= closeTime) {
+        countdownEl.innerText = "00:00:00";
+        statusEl.innerText = "Subasta cerrada (22:00)";
+        statusEl.className = "text-xs font-bold text-rose-600";
+        submitBtn.disabled = true;
+        submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+        return;
+      }
+
+      const diffMs = closeTime - now;
+      const totalSec = Math.floor(diffMs / 1000);
+      const hrs = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(totalSec % 60).padStart(2, '0');
+
+      countdownEl.innerText = `${hrs}:${mins}:${secs}`;
+      statusEl.innerText = "Subasta activa";
+      statusEl.className = "text-xs font-bold text-emerald-700";
+      submitBtn.disabled = false;
+      submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    }
+
+    function renderAuctionLeader(highest) {
+      const amountEl = document.getElementById('auctionHighestAmount');
+      const leaderEl = document.getElementById('auctionHighestLeader');
+      if (!amountEl || !leaderEl) return;
+
+      const monto = Number(highest && highest.monto) || AUCTION_CONFIG.basePrice;
+      currentHighestBid = Math.max(monto, AUCTION_CONFIG.basePrice);
+      amountEl.innerText = `${CONFIG.currency} ${currentHighestBid.toFixed(2)}`;
+
+      if (highest && highest.nombre && highest.nombre !== 'Sin ofertas aún' && highest.nombre !== 'Precio Base') {
+        const mask = highest.whatsappMasked ? ` (${highest.whatsappMasked})` : '';
+        leaderEl.innerText = `Líder: ${highest.nombre}${mask}`;
+      } else {
+        leaderEl.innerText = "Precio base inicial";
+      }
+    }
+
+    async function loadHighestBid() {
+      const feedbackEl = document.getElementById('auctionFeedback');
+      if (!AUCTION_CONFIG.scriptUrl || AUCTION_CONFIG.scriptUrl.includes("PEGA_AQUI")) return;
+
+      try {
+        const res = await fetch(AUCTION_CONFIG.scriptUrl, { method: 'GET' });
+        const data = await res.json();
+        if (data && data.ok && data.highest) {
+          renderAuctionLeader(data.highest);
+        }
+      } catch (err) {
+        if (feedbackEl) feedbackEl.innerText = "No se pudo consultar la última oferta ahora.";
+      }
+    }
+
+    async function submitAuctionBid(event) {
+      event.preventDefault();
+      const feedbackEl = document.getElementById('auctionFeedback');
+      const submitBtn = document.getElementById('auctionSubmitBtn');
+
+      if (isAuctionClosed()) {
+        feedbackEl.innerText = "La subasta ya cerró a las 22:00.";
+        return;
+      }
+
+      const nombre = document.getElementById('bidderName').value.trim();
+      const whatsapp = document.getElementById('bidderPhone').value.trim();
+      const monto = Number(document.getElementById('bidderAmount').value);
+      const prenda = document.getElementById('auctionItemTitle').innerText.trim();
+
+      if (!nombre || !whatsapp || !monto || monto <= currentHighestBid) {
+        feedbackEl.innerText = `Tu oferta debe ser mayor a ${CONFIG.currency} ${currentHighestBid.toFixed(2)}.`;
+        return;
+      }
+
+      submitBtn.disabled = true;
+      feedbackEl.innerText = "Registrando tu puja...";
+
+      try {
+        const res = await fetch(AUCTION_CONFIG.scriptUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            nombre: nombre,
+            whatsapp: whatsapp,
+            prenda: prenda,
+            monto: monto
+          })
+        });
+        const data = await res.json();
+
+        if (data && data.ok) {
+          renderAuctionLeader(data.highest);
+          document.getElementById('auctionBidForm').reset();
+          feedbackEl.innerText = "¡Puja registrada! Ahora vas ganando.";
+        } else {
+          feedbackEl.innerText = (data && data.error) || "No se pudo registrar la puja.";
+          await loadHighestBid();
+        }
+      } catch (err) {
+        feedbackEl.innerText = "Error de conexión al guardar la puja.";
+      } finally {
+        updateAuctionCountdown();
+      }
+    }
+
+    function switchMode(mode) {
+      const auctionSec = document.getElementById('auctionSection');
+      const tabCatalog = document.getElementById('tabCatalogBtn');
+      const tabAuction = document.getElementById('tabAuctionBtn');
+      const catFilters = document.getElementById('categoryFilters')?.parentElement;
+      const searchBox = document.getElementById('searchInput')?.parentElement;
+      const productGrid = document.getElementById('productGrid');
+
+      const isAuction = mode === 'auction';
+      if (auctionSec) auctionSec.classList.toggle('hidden', !isAuction);
+      if (catFilters) catFilters.classList.toggle('hidden', isAuction);
+      if (searchBox) searchBox.classList.toggle('hidden', isAuction);
+      if (productGrid) productGrid.classList.toggle('hidden', isAuction);
+
+      if (tabCatalog && tabAuction) {
+        if (isAuction) {
+          tabAuction.className = "flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 transition";
+          tabCatalog.className = "flex-1 py-2.5 px-3 rounded-xl text-purple-900 hover:bg-purple-50 font-extrabold text-xs flex items-center justify-center gap-1.5 transition";
+          loadHighestBid();
+        } else {
+          tabCatalog.className = "flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 transition";
+          tabAuction.className = "flex-1 py-2.5 px-3 rounded-xl text-purple-900 hover:bg-purple-50 font-extrabold text-xs flex items-center justify-center gap-1.5 transition";
+        }
+      }
+      lucide.createIcons();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateAuctionCountdown();
+      auctionTimerInterval = setInterval(updateAuctionCountdown, 1000);
+      loadHighestBid();
     });
   </script>
 </body>
