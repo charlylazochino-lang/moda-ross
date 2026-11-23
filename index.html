@@ -146,12 +146,17 @@
             </div>
           </div>
 
+          <!-- Iframe oculto para envío 100% libre de bloqueo CORS -->
+          <iframe name="hiddenBidFrame" id="hiddenBidFrame" class="hidden"></iframe>
+
           <!-- Formulario de puja -->
-          <form id="auctionBidForm" onsubmit="submitAuctionBid(event)" class="space-y-2.5">
-            <input id="bidderName" type="text" required placeholder="Tu nombre o apodo *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-pink-500 outline-none">
+          <form id="auctionBidForm" target="hiddenBidFrame" method="GET" onsubmit="return submitAuctionBid(event)" class="space-y-2.5">
+            <input type="hidden" name="action" value="bid">
+            <input type="hidden" id="hiddenPrendaInput" name="prenda" value="Chamarra Montañera Exclusiva Ed. Limitada">
+            <input id="bidderName" name="nombre" type="text" required placeholder="Tu nombre o apodo *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-pink-500 outline-none">
             <div class="grid grid-cols-2 gap-2">
-              <input id="bidderPhone" type="tel" required placeholder="Tu WhatsApp (ej. 67335490) *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-pink-500 outline-none">
-              <input id="bidderAmount" type="number" step="1" min="1" required placeholder="Tu oferta en Bs *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-pink-500 outline-none">
+              <input id="bidderPhone" name="whatsapp" type="tel" required placeholder="Tu WhatsApp (ej. 67335490) *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-pink-500 outline-none">
+              <input id="bidderAmount" name="monto" type="number" step="1" min="1" required placeholder="Tu oferta en Bs *" class="w-full bg-white border border-pink-200 rounded-xl px-3.5 py-2.5 text-xs font-bold focus:ring-2 focus:ring-pink-500 outline-none">
             </div>
             <button id="auctionSubmitBtn" type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-95 text-white font-extrabold text-xs shadow-md transition">
               Registrar Puja en Subasta
@@ -407,7 +412,7 @@
   </div>
 
   <!-- =========================================================================
-       [SUBTÍTULO 12]: CEREBRO JAVASCRIPT (CATÁLOGO + SUBASTA)
+       [SUBTÍTULO 12]: CEREBRO JAVASCRIPT (CATÁLOGO + SUBASTA SIN BLOQUEOS CORS)
        ========================================================================= -->
   <script>
     const CONFIG = {
@@ -862,10 +867,10 @@
     }
 
     // =========================================================================
-    // LÓGICA DE SUBASTA EN TIEMPO REAL CON GOOGLE SHEETS
+    // LÓGICA DE SUBASTA (ENVÍO POR IFRAME + LECTURA JSONP SIN BLOQUEO CORS)
     // =========================================================================
     const AUCTION_CONFIG = {
-      scriptUrl: "https://script.google.com/macros/s/AKfycbxCX1fGKulz8NGgxSkj9RXv8LbF6-ykgFZHcJ-TA0QJMQwkvk72qMTv_9xvz4j4tT0/exec",
+      scriptUrl: "https://script.google.com/macros/s/AKfycbzHL48HV8GTHTh6bpdBwEGNx-HfIwnBVDEZR7JznR3PXflRI-puyWBefiv6ZDSG0zpe/exec",
       basePrice: 20,
       closeHour: 22,
       closeMinute: 0
@@ -941,29 +946,31 @@
       }
     }
 
-    async function loadHighestBid() {
-      const feedbackEl = document.getElementById('auctionFeedback');
-      if (!AUCTION_CONFIG.scriptUrl || AUCTION_CONFIG.scriptUrl.includes("PEGA_AQUI")) return;
-
-      try {
-        const res = await fetch(AUCTION_CONFIG.scriptUrl, { method: 'GET' });
-        const data = await res.json();
-        if (data && data.ok && data.highest) {
-          renderAuctionState(data.highest, data.lastBid);
-        }
-      } catch (err) {
-        if (feedbackEl) feedbackEl.innerText = "No se pudo consultar la última oferta ahora.";
+    function handleAuctionJsonp(data) {
+      if (data && data.ok && data.highest) {
+        renderAuctionState(data.highest, data.lastBid);
       }
     }
 
-    async function submitAuctionBid(event) {
-      event.preventDefault();
+    function loadHighestBid() {
+      const oldScript = document.getElementById('auctionJsonpScript');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'auctionJsonpScript';
+      script.src = `${AUCTION_CONFIG.scriptUrl}?callback=handleAuctionJsonp&t=${Date.now()}`;
+      document.body.appendChild(script);
+    }
+
+    function submitAuctionBid(event) {
       const feedbackEl = document.getElementById('auctionFeedback');
       const submitBtn = document.getElementById('auctionSubmitBtn');
+      const form = document.getElementById('auctionBidForm');
 
       if (isAuctionClosed()) {
+        event.preventDefault();
         feedbackEl.innerText = "La subasta ya cerró a las 22:00.";
-        return;
+        return false;
       }
 
       const nombre = document.getElementById('bidderName').value.trim();
@@ -972,37 +979,24 @@
       const prenda = document.getElementById('auctionItemTitle').innerText.trim();
 
       if (!nombre || !whatsapp || !monto || monto <= currentHighestBid) {
+        event.preventDefault();
         feedbackEl.innerText = `Tu oferta debe ser mayor a ${CONFIG.currency} ${currentHighestBid.toFixed(2)}.`;
-        return;
+        return false;
       }
 
+      document.getElementById('hiddenPrendaInput').value = prenda;
+      form.action = AUCTION_CONFIG.scriptUrl;
       submitBtn.disabled = true;
-      feedbackEl.innerText = "Guardando tu puja en la hoja...";
+      feedbackEl.innerText = "Guardando puja en Google Sheets...";
 
-      try {
-        const params = new URLSearchParams({
-          action: "bid",
-          nombre: nombre,
-          whatsapp: whatsapp,
-          prenda: prenda,
-          monto: String(monto)
-        });
-        const res = await fetch(`${AUCTION_CONFIG.scriptUrl}?${params.toString()}`, { method: 'GET' });
-        const data = await res.json();
-
-        if (data && data.ok) {
-          renderAuctionState(data.highest, data.lastBid);
-          document.getElementById('auctionBidForm').reset();
-          feedbackEl.innerText = `¡Puja de ${CONFIG.currency} ${monto.toFixed(2)} guardada en la hoja!`;
-        } else {
-          feedbackEl.innerText = (data && data.error) || "No se pudo guardar la puja.";
-          await loadHighestBid();
-        }
-      } catch (err) {
-        feedbackEl.innerText = "Error de conexión al guardar la puja.";
-      } finally {
+      setTimeout(() => {
+        loadHighestBid();
+        form.reset();
+        feedbackEl.innerText = `¡Puja de ${CONFIG.currency} ${monto.toFixed(2)} registrada en la hoja!`;
         updateAuctionCountdown();
-      }
+      }, 1800);
+
+      return true;
     }
 
     function switchMode(mode) {
