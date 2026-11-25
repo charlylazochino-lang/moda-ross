@@ -298,49 +298,61 @@
   </div>
 
   <!-- =========================================================================
-       [SUBTÍTULO 9]: VISOR DE FOTOS AMPLIADO (COMPLETA SIN RECORTAR) Y TALLA FIJA
+       [SUBTÍTULO 9]: VISOR AMPLIADO (VERTICAL EN MÓVIL / 2 COLUMNAS EN PC)
        ========================================================================= -->
-  <div id="productModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl">
-      <div class="relative bg-slate-950">
-        <img id="modalImg" src="" alt="Detalle" class="w-full h-80 object-contain">
-        <button onclick="closeProductModal()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70">
+  <div id="productModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-3xl max-w-md md:max-w-3xl w-full max-h-[92vh] overflow-y-auto md:overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-2">
+      
+      <!-- Columna 1: Foto completa sin recortar -->
+      <div class="relative bg-slate-950 flex items-center justify-center min-h-[290px] sm:min-h-[340px] md:h-[460px]">
+        <img id="modalImg" src="" alt="Detalle" class="w-full h-72 sm:h-80 md:h-full object-contain">
+        <button onclick="closeProductModal()" class="md:hidden absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
 
         <!-- Controles si la prenda tiene 2 o 3 fotos -->
-        <button id="prevPhotoBtn" type="button" onclick="stepModalPhoto(-1)" class="hidden absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/55 text-white flex items-center justify-center hover:bg-black/75" aria-label="Foto anterior">
+        <button id="prevPhotoBtn" type="button" onclick="stepModalPhoto(-1)" class="hidden absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80" aria-label="Foto anterior">
           <i data-lucide="chevron-left" class="w-4 h-4"></i>
         </button>
-        <button id="nextPhotoBtn" type="button" onclick="stepModalPhoto(1)" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/55 text-white flex items-center justify-center hover:bg-black/75" aria-label="Siguiente foto">
+        <button id="nextPhotoBtn" type="button" onclick="stepModalPhoto(1)" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80" aria-label="Siguiente foto">
           <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </button>
 
         <span class="absolute bottom-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow flex items-center gap-1">
           <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Compra Segura Verificada
         </span>
-        <span id="modalPhotoCounter" class="hidden absolute bottom-3 right-3 bg-black/65 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+        <span id="modalPhotoCounter" class="hidden absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
           1 / 1
         </span>
       </div>
-      <div class="p-5 space-y-4">
-        <div class="flex justify-between items-start gap-2">
-          <h3 id="modalTitle" class="font-extrabold text-lg text-slate-900 leading-snug"></h3>
-          <span id="modalPrice" class="font-black text-xl text-pink-600 shrink-0"></span>
-        </div>
 
-        <!-- Talla destacada de la prenda americana -->
-        <div id="modalSizeBadgeBox" class="flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-2xl px-3.5 py-2.5">
-          <i data-lucide="ruler" class="w-4 h-4 text-pink-600 shrink-0"></i>
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-pink-700 block leading-none">Talla Única Disponible</span>
-            <span id="modalSizeText" class="text-sm font-black text-purple-950"></span>
+      <!-- Columna 2: Título, precio, talla única y descripción amigable al costado en PC -->
+      <div class="p-5 md:p-6 flex flex-col justify-between gap-4 md:max-h-[460px] md:overflow-y-auto">
+        <div class="space-y-3.5">
+          <div class="hidden md:flex justify-end">
+            <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-pink-100 hover:text-pink-700 transition" aria-label="Cerrar">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
           </div>
+
+          <div class="flex justify-between items-start gap-2">
+            <h3 id="modalTitle" class="font-extrabold text-lg text-slate-900 leading-snug"></h3>
+            <span id="modalPrice" class="font-black text-xl text-pink-600 shrink-0"></span>
+          </div>
+
+          <!-- Talla destacada de la prenda americana -->
+          <div id="modalSizeBadgeBox" class="flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-2xl px-3.5 py-2.5">
+            <i data-lucide="ruler" class="w-4 h-4 text-pink-600 shrink-0"></i>
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-pink-700 block leading-none">Talla Única Disponible</span>
+              <span id="modalSizeText" class="text-sm font-black text-purple-950"></span>
+            </div>
+          </div>
+
+          <p id="modalDesc" class="text-xs sm:text-[13px] text-slate-700 leading-relaxed"></p>
         </div>
 
-        <p id="modalDesc" class="text-xs sm:text-[13px] text-slate-700 leading-relaxed"></p>
-
-        <div class="grid grid-cols-2 gap-2.5 pt-1">
+        <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-100">
           <a id="modalDirectWa" href="#" target="_blank" class="py-3 px-4 rounded-xl border border-emerald-500 text-emerald-700 font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-emerald-50">
             <i data-lucide="message-circle" class="w-4 h-4"></i> Consultar
           </a>
@@ -349,6 +361,7 @@
           </button>
         </div>
       </div>
+
     </div>
   </div>
 
