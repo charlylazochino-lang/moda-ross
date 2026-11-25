@@ -306,6 +306,11 @@
       <!-- Columna 1: Foto completa sin recortar -->
       <div class="relative bg-slate-950 flex items-center justify-center min-h-[290px] sm:min-h-[340px] md:h-[460px]">
         <img id="modalImg" src="" alt="Detalle" class="w-full h-72 sm:h-80 md:h-full object-contain">
+        <div id="modalSoldOverlay" class="hidden pointer-events-none absolute inset-0 flex items-center justify-center bg-black/30">
+          <span class="bg-red-600 text-white font-black tracking-widest text-base sm:text-lg px-5 py-1.5 rounded-xl shadow-xl -rotate-12 border-2 border-white uppercase">
+            Vendido
+          </span>
+        </div>
         <button onclick="closeProductModal()" class="md:hidden absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
@@ -461,7 +466,7 @@
   </div>
 
   <!-- =========================================================================
-       [SUBTÍTULO 12]: INVENTARIO (TALLA FIJA POR PRENDA AMERICANA)
+       [SUBTÍTULO 12]: INVENTARIO (sold: false = VIGENTE / sold: true = VENDIDO)
        ========================================================================= -->
   <script>
     const CONFIG = {
@@ -472,9 +477,9 @@
     };
 
     const products = [
-      
       {
         id: 201,
+        sold: false,
         name: "Chamarra Estilo Bomber Negra Cedar Wood State Original",
         category: "abrigos",
         size: "M Hombre (54×66 cm · corte entallado europeo)",
@@ -487,6 +492,7 @@
       },
       {
         id: 202,
+        sold: false,
         name: "Chamarra Impermeable Alta Montaña Jack Wolfskin Azul",
         category: "abrigos",
         size: "XXL Hombre (67×83 cm)",
@@ -500,6 +506,7 @@
       },
       {
         id: 203,
+        sold: false,
         name: "Chamarra Cortavientos Karrimor Run Original Negro",
         category: "abrigos",
         size: "L Hombre (62×74 cm · UK L / US L)",
@@ -513,6 +520,7 @@
       },
       {
         id: 204,
+        sold: false,
         name: "Chamarra Cortavientos Starter Original Retro Negra",
         category: "abrigos",
         size: "M Hombre (60×72 cm · 38-40)",
@@ -524,6 +532,7 @@
       },
       {
         id: 205,
+        sold: false,
         name: "Chamarra Cortavientos Reebok Sports Division Azul Marino",
         category: "abrigos",
         size: "S US / M EU (57×65 cm)",
@@ -535,6 +544,7 @@
       },
       {
         id: 206,
+        sold: false,
         name: "Chamarra Impermeable Mountain Warehouse Bicolor",
         category: "abrigos",
         size: "M Hombre (61×71 cm)",
@@ -547,6 +557,7 @@
       },
       {
         id: 207,
+        sold: false,
         name: "Chamarra Térmica Vintage Columbia Eclipse 90s",
         category: "abrigos",
         size: "S / M Hombre (62×78 cm · corte clásico)",
@@ -561,6 +572,7 @@
       },
       {
         id: 208,
+        sold: false,
         name: "Polerón / Hoodie Carhartt Original K121 Negro",
         category: "abrigos",
         size: "L Hombre (63×77 cm · Loose Fit)",
@@ -575,6 +587,7 @@
       },
       {
         id: 209,
+        sold: false,
         name: "Polera Manga Larga Vintage Oso Brand Y2K",
         category: "varios",
         size: "M Hombre (47×66 cm)",
@@ -587,6 +600,7 @@
       },
       {
         id: 210,
+        sold: false,
         name: "Parka Térmica de Pluma Millet Alta Montaña",
         category: "abrigos",
         size: "95 / M Hombre (57×75 cm)",
@@ -599,6 +613,7 @@
       },
       {
         id: 211,
+        sold: false,
         name: "Parka Impermeable Mountain Warehouse Extreme IsoDry",
         category: "abrigos",
         size: "XL / 2XL (62×95 cm)",
@@ -612,46 +627,15 @@
       },
       {
         id: 212,
-        name: "Mochila Deportiva Impermeable",
-        category: "varios",
-        size: "",
-        desc: "Mochila resistente e impermeable con buen espacio para ropa de entrenamiento, cuadernos o salidas cortas.",
-        price: 120.00,
+        sold: false,
+        name: "Chamarra Cortavientos Slazenger Original Deportiva",
+        category: "abrigos",
+        size: "L / XL (57×70 cm)",
+        desc: "Chamarra deportiva original de la marca británica Slazenger, ligera y cómoda para correr, entrenar, andar en bicicleta o uso urbano casual. Bloquea el aire frío, protege contra lloviznas y ofrece buen movimiento. Estado 9.9/10.",
+        price: 170.00,
         imgs: [
-          "varios/mochila-deportiva-1.jpg"
-        ]
-      },
-      {
-        id: 213,
-        name: "Botella / Tomatodo Motivacional 1L",
-        category: "varios",
-        size: "",
-        desc: "Botella de 1 litro libre de BPA con cierre antiderrames, ideal para acompañarte en el gym o durante el día.",
-        price: 45.00,
-        imgs: [
-          "varios/tomatodo-1l-1.jpg"
-        ]
-      },
-      {
-        id: 214,
-        name: "Pack x3 Medias Deportivas Algodón",
-        category: "varios",
-        size: "Estándar",
-        desc: "Pack de 3 pares de medias de algodón con talón y planta acolchados para mayor confort y duración.",
-        price: 35.00,
-        imgs: [
-          "varios/medias-pack-1.jpg"
-        ]
-      },
-      {
-        id: 215,
-        name: "Cangurera Deportiva Multifunción",
-        category: "varios",
-        size: "",
-        desc: "Cangurera práctica con correa ajustable y cierres seguros para llevar celular, dinero o llaves con comodidad.",
-        price: 55.00,
-        imgs: [
-          "varios/cangurera-1.jpg"
+          "chamarras/slazenger-negra-1.jpg",
+          "chamarras/slazenger-negra-2.jpg"
         ]
       }
     ];
@@ -679,7 +663,8 @@
         return matchesCat && matchesSearch;
       });
 
-      document.getElementById('productCounter').innerText = `${filtered.length} prendas disponibles`;
+      const availableCount = filtered.filter(p => !p.sold).length;
+      document.getElementById('productCounter').innerText = `${availableCount} disponibles · ${filtered.length} en catálogo`;
 
       if (filtered.length === 0) {
         container.innerHTML = `
@@ -693,16 +678,26 @@
       }
 
       container.innerHTML = filtered.map(p => {
-        const qty = cart[p.id] ? cart[p.id].qty : 0;
+        const isSold = Boolean(p.sold);
+        const qty = (!isSold && cart[p.id]) ? cart[p.id].qty : 0;
         const photos = getProductImages(p);
         const coverImg = photos[0];
         const sizeLabel = p.size ? ` (Talla: ${p.size})` : '';
-        const directWaLink = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', quiero consultar disponibilidad de: *' + p.name + '*' + sizeLabel + ' (' + CONFIG.currency + ' ' + p.price.toFixed(2) + ').')}`;
+        const waText = isSold
+          ? `Hola ${CONFIG.businessName}, vi que ya vendieron *${p.name}*${sizeLabel}. ¿Tienen alguna similar disponible?`
+          : `Hola ${CONFIG.businessName}, quiero consultar disponibilidad de: *${p.name}*${sizeLabel} (${CONFIG.currency} ${p.price.toFixed(2)}).`;
+        const directWaLink = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent(waText)}`;
 
         return `
           <div class="bg-white rounded-3xl border border-pink-100/80 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-200 flex flex-col justify-between group">
             <div class="relative bg-slate-950 overflow-hidden cursor-pointer" onclick="openProductModal(${p.id})">
-              <img src="${coverImg}" alt="${p.name}" class="w-full h-44 md:h-52 object-contain group-hover:scale-105 transition duration-300" loading="lazy">
+              <img src="${coverImg}" alt="${p.name}" class="w-full h-44 md:h-52 object-contain group-hover:scale-105 transition duration-300 ${isSold ? 'opacity-65 grayscale-[25%]' : ''}" loading="lazy">
+              ${isSold ? `
+                <div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+                  <span class="bg-red-600 text-white font-black tracking-widest text-xs sm:text-sm px-4 py-1.5 rounded-xl shadow-lg -rotate-12 border-2 border-white uppercase">
+                    Vendido
+                  </span>
+                </div>` : ''}
               ${photos.length > 1 ? `
                 <span class="absolute bottom-2 left-2 bg-purple-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-1 rounded-lg">
                   ${photos.length} fotos
@@ -710,7 +705,7 @@
               <span class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-1 rounded-lg flex items-center gap-1">
                 <i data-lucide="zoom-in" class="w-3 h-3"></i> Ampliar
               </span>
-              ${qty > 0 ? `
+              ${!isSold && qty > 0 ? `
                 <span class="absolute top-2.5 left-2.5 bg-purple-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md">
                   ✓ Elegido: ${qty}
                 </span>` : ''}
@@ -728,13 +723,17 @@
 
               <div class="pt-1 border-t border-slate-100">
                 <div class="flex items-center justify-between mb-2">
-                  <span class="font-black text-purple-950 text-base md:text-lg">${CONFIG.currency} ${p.price.toFixed(2)}</span>
+                  <span class="font-black ${isSold ? 'text-slate-400 line-through' : 'text-purple-950'} text-base md:text-lg">${CONFIG.currency} ${p.price.toFixed(2)}</span>
                   <a href="${directWaLink}" target="_blank" title="Preguntar directo en WhatsApp" class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 hover:bg-[#25D366] hover:text-white flex items-center justify-center transition">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
                   </a>
                 </div>
 
-                ${qty === 0 ? `
+                ${isSold ? `
+                  <button type="button" disabled class="w-full bg-slate-100 text-slate-500 font-extrabold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-not-allowed">
+                    <span>Vendido · Pieza Única</span>
+                  </button>
+                ` : qty === 0 ? `
                   <button onclick="updateQty(${p.id}, 1)" class="w-full bg-pink-50 hover:bg-gradient-to-r hover:from-pink-600 hover:to-purple-600 hover:text-white text-pink-700 font-extrabold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     <span>Elegir Prenda</span>
@@ -787,9 +786,15 @@
       const p = products.find(item => item.id === id);
       if (!p) return;
 
+      const isSold = Boolean(p.sold);
       modalPhotos = getProductImages(p);
       modalPhotoIndex = 0;
       updateModalPhotoView();
+
+      const imgEl = document.getElementById('modalImg');
+      const soldOverlay = document.getElementById('modalSoldOverlay');
+      imgEl.classList.toggle('opacity-65', isSold);
+      soldOverlay.classList.toggle('hidden', !isSold);
 
       document.getElementById('modalTitle').innerText = p.name;
       document.getElementById('modalPrice').innerText = `${CONFIG.currency} ${p.price.toFixed(2)}`;
@@ -805,13 +810,27 @@
       }
 
       const sizeMsg = p.size ? ` (Talla: ${p.size})` : '';
-      document.getElementById('modalDirectWa').href = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', quiero consultar sobre: *' + p.name + '*' + sizeMsg)}`;
+      const waText = isSold
+        ? `Hola ${CONFIG.businessName}, vi que ya vendieron *${p.name}*${sizeMsg}. ¿Tienen alguna similar?`
+        : `Hola ${CONFIG.businessName}, quiero consultar sobre: *${p.name}*${sizeMsg}`;
+      document.getElementById('modalDirectWa').href = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent(waText)}`;
       
-      document.getElementById('modalAddBtn').onclick = () => {
-        updateQty(p.id, 1);
-        closeProductModal();
-        toggleCart(true);
-      };
+      const addBtn = document.getElementById('modalAddBtn');
+      if (isSold) {
+        addBtn.disabled = true;
+        addBtn.className = "py-3 px-4 rounded-xl bg-slate-200 text-slate-500 font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-not-allowed";
+        addBtn.innerHTML = `<span>Prenda Vendida</span>`;
+        addBtn.onclick = null;
+      } else {
+        addBtn.disabled = false;
+        addBtn.className = "py-3 px-4 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-md";
+        addBtn.innerHTML = `<i data-lucide="shopping-bag" class="w-4 h-4"></i> Agregar al Pedido`;
+        addBtn.onclick = () => {
+          updateQty(p.id, 1);
+          closeProductModal();
+          toggleCart(true);
+        };
+      }
 
       document.getElementById('productModal').classList.remove('hidden');
       lucide.createIcons();
@@ -823,6 +842,7 @@
 
     function updateQty(id, change) {
       const prod = products.find(p => p.id === id);
+      if (prod && prod.sold) return;
       const currentQty = cart[id] ? cart[id].qty : 0;
       const nextQty = currentQty + change;
 
@@ -1180,3 +1200,4 @@
   </script>
 </body>
 </html>
+
