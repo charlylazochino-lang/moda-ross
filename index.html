@@ -80,7 +80,7 @@
         </p>
         <div class="pt-0.5 md:pt-1 flex flex-wrap gap-1.5 md:gap-2 text-[10px] md:text-[11px] font-semibold text-white/95">
           <span class="bg-black/45 backdrop-blur-xs px-2 py-1 md:px-2.5 rounded-lg flex items-center gap-1">
-            <i data-lucide="shield-check" class="w-3 h-3 md:w-3.5 md:h-3.5 text-emerald-400"></i> Stock verificado
+            <i data-lucide="shield-check" class="w-3 h-3 md:w-3.5 md:h-3.5 text-emerald-400"></i> Pieza única verificada
           </span>
           <span class="bg-black/45 backdrop-blur-xs px-2 py-1 md:px-2.5 rounded-lg flex items-center gap-1">
             <i data-lucide="message-square-check" class="w-3 h-3 md:w-3.5 md:h-3.5 text-pink-400"></i> Trato en WhatsApp
@@ -109,8 +109,8 @@
     <section id="auctionSection" class="hidden space-y-4">
       <div class="bg-white rounded-3xl border border-pink-100 shadow-md overflow-hidden grid grid-cols-1 md:grid-cols-2">
         <!-- Prenda exclusiva a subastar -->
-        <div class="relative bg-slate-900">
-          <img id="auctionItemImg" src="https://images.unsplash.com/photo-1544923246-77307dd654cb?w=700&q=80" alt="Prenda Exclusiva en Subasta" class="w-full h-64 md:h-full object-cover">
+        <div class="relative bg-slate-950">
+          <img id="auctionItemImg" src="chamarras/azul-1.jpg" alt="Prenda Exclusiva en Subasta" class="w-full h-64 md:h-full object-contain">
           <span class="absolute top-3 left-3 bg-purple-700 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow">
             🔥 Pieza Exclusiva
           </span>
@@ -212,7 +212,7 @@
       <input 
         id="searchInput" 
         type="text" 
-        placeholder="Buscar rompevientos, montañera, polera gym, chullo, varios..." 
+        placeholder="Buscar por marca, talla (S, M, L, XL, XXL), rompevientos, chullo..." 
         oninput="handleSearch()"
         class="w-full bg-white border border-pink-200 rounded-2xl pl-12 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 shadow-xs"
       />
@@ -237,7 +237,7 @@
           <div class="w-8 h-8 rounded-xl bg-pink-600 text-white font-black flex items-center justify-center shrink-0">1</div>
           <div>
             <h4 class="font-extrabold text-slate-800">Elige tus prendas</h4>
-            <p class="text-slate-500 mt-0.5 leading-relaxed">Agrega al carrito las prendas y tallas que te gustan sin introducir tarjetas ni datos bancarios.</p>
+            <p class="text-slate-500 mt-0.5 leading-relaxed">Cada prenda americana es pieza única con su talla y medidas verificadas.</p>
           </div>
         </div>
 
@@ -298,12 +298,12 @@
   </div>
 
   <!-- =========================================================================
-       [SUBTÍTULO 9]: VISOR DE FOTOS AMPLIADO (1, 2 O 3 FOTOS) Y SELECTOR DE TALLAS
+       [SUBTÍTULO 9]: VISOR DE FOTOS AMPLIADO (COMPLETA SIN RECORTAR) Y TALLA FIJA
        ========================================================================= -->
   <div id="productModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl">
-      <div class="relative bg-slate-900">
-        <img id="modalImg" src="" alt="Detalle" class="w-full h-72 object-cover">
+      <div class="relative bg-slate-950">
+        <img id="modalImg" src="" alt="Detalle" class="w-full h-80 object-contain">
         <button onclick="closeProductModal()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
@@ -328,19 +328,19 @@
           <h3 id="modalTitle" class="font-extrabold text-lg text-slate-900 leading-snug"></h3>
           <span id="modalPrice" class="font-black text-xl text-pink-600 shrink-0"></span>
         </div>
-        <p id="modalDesc" class="text-xs text-slate-600 leading-relaxed"></p>
-        
-        <div id="modalSizeSection" class="space-y-1.5">
-          <label class="text-[11px] font-bold text-slate-500 uppercase">Selecciona tu talla:</label>
-          <div class="flex gap-2" id="sizeButtons">
-            <button type="button" onclick="selectSize('S')" data-size="S" class="size-btn flex-1 py-2 rounded-xl border border-pink-200 text-xs font-bold text-slate-700">S</button>
-            <button type="button" onclick="selectSize('M')" data-size="M" class="size-btn flex-1 py-2 rounded-xl border-2 border-pink-600 bg-pink-50 text-xs font-extrabold text-pink-700">M</button>
-            <button type="button" onclick="selectSize('L')" data-size="L" class="size-btn flex-1 py-2 rounded-xl border border-pink-200 text-xs font-bold text-slate-700">L</button>
-            <button type="button" onclick="selectSize('XL')" data-size="XL" class="size-btn flex-1 py-2 rounded-xl border border-pink-200 text-xs font-bold text-slate-700">XL</button>
+
+        <!-- Talla destacada de la prenda americana -->
+        <div id="modalSizeBadgeBox" class="flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-2xl px-3.5 py-2.5">
+          <i data-lucide="ruler" class="w-4 h-4 text-pink-600 shrink-0"></i>
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-pink-700 block leading-none">Talla Única Disponible</span>
+            <span id="modalSizeText" class="text-sm font-black text-purple-950"></span>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2.5 pt-2">
+        <p id="modalDesc" class="text-xs sm:text-[13px] text-slate-700 leading-relaxed"></p>
+
+        <div class="grid grid-cols-2 gap-2.5 pt-1">
           <a id="modalDirectWa" href="#" target="_blank" class="py-3 px-4 rounded-xl border border-emerald-500 text-emerald-700 font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-emerald-50">
             <i data-lucide="message-circle" class="w-4 h-4"></i> Consultar
           </a>
@@ -448,7 +448,7 @@
   </div>
 
   <!-- =========================================================================
-       [SUBTÍTULO 12]: INVENTARIO (CARPETAS: chamarras, deportivos, chullos, varios)
+       [SUBTÍTULO 12]: INVENTARIO (TALLA FIJA POR PRENDA AMERICANA)
        ========================================================================= -->
   <script>
     const CONFIG = {
@@ -458,20 +458,14 @@
       storeUrl: window.location.href
     };
 
-    // Carpetas creadas en el proyecto:
-    // - chamarras/  -> category: "abrigos"
-    // - deportivos/ -> category: "gym"
-    // - chullos/    -> category: "chullitos"
-    // - varios/     -> category: "varios"
-    // Cada prenda acepta 1, 2 o 3 fotos en `imgs: [ ... ]`
     const products = [
       {
         id: 201,
         name: "Chamarra Rompevientos Impermeable",
         category: "abrigos",
-        desc: "Cortavientos liviana con capucha ajustable, ideal para lluvia ligera y viento.",
+        size: "M",
+        desc: "Chamarra cortavientos liviana con capucha ajustable, cómoda y práctica para lluvia ligera, viento o uso diario.",
         price: 165.00,
-        hasSizes: true,
         imgs: [
           "chamarras/rompevientos-1.jpg"
         ]
@@ -480,9 +474,9 @@
         id: 202,
         name: "Chamarra Impermeable Alta Montaña Jack Wolfskin Azul",
         category: "abrigos",
-        desc: "Texapore Ecosphere 20,000 mm, 100% impermeable y cortavientos, sistema 3 en 1. Talla XXL hombre (67x83 cm), estado 9.7/10.",
+        size: "XXL Hombre (67×83 cm)",
+        desc: "Chamarra original Jack Wolfskin (cód. 1112651) con membrana Texapore Ecosphere 20,000 mm: 100% impermeable, cortavientos y respirable para lluvia intensa, frío o montaña. Sistema 3 en 1, cierres protegidos y estado 9.7/10. Entregas en Mi Teleférico (Morada, Roja o Amarilla), El Alto o paqueterías.",
         price: 280.00,
-        hasSizes: true,
         imgs: [
           "chamarras/azul-1.jpg",
           "chamarras/azul-2.jpg",
@@ -493,9 +487,9 @@
         id: 203,
         name: "Chamarra Cortavientos Karrimor Run Negro",
         category: "abrigos",
-        desc: "Color negro, ultraligera y cortavientos con detalles reflectivos. Talla L hombre (62x74 cm), estado 9.8/10.",
+        size: "L Hombre (62×74 cm)",
+        desc: "Chamarra negra ultraligera y cortavientos con detalles reflectivos, ideal para correr, caminar o abrigarte sin peso extra. Estado 9.8/10.",
         price: 150.00,
-        hasSizes: true,
         imgs: [
           "chamarras/karrimor-negro-1.jpg",
           "chamarras/karrimor-negro-2.jpg",
@@ -506,9 +500,9 @@
         id: 204,
         name: "Parka Montañera Entallada Dama",
         category: "abrigos",
-        desc: "Acabado elegante y térmico con cuello alto protector contra el viento.",
+        size: "M Dama",
+        desc: "Parka entallada de corte favorecedor con acabado térmico y cuello alto para protegerte del frío y el viento.",
         price: 310.00,
-        hasSizes: true,
         imgs: [
           "chamarras/parka-dama-1.jpg"
         ]
@@ -517,9 +511,9 @@
         id: 205,
         name: "Polera Deportiva Dry-Fit Dama",
         category: "gym",
-        desc: "Tela fresca respirable que no retiene humedad. Ideal para gimnasio.",
+        size: "S Dama",
+        desc: "Polera deportiva fresca y respirable que ayuda a evacuar la humedad. Muy cómoda para entrenar o moverte todo el día.",
         price: 75.00,
-        hasSizes: true,
         imgs: [
           "deportivos/dryfit-dama-1.jpg"
         ]
@@ -528,9 +522,9 @@
         id: 206,
         name: "Top / Polera Corta Gym Seamless",
         category: "gym",
-        desc: "Tecnología sin costuras que se adapta al cuerpo con total comodidad.",
+        size: "M Dama",
+        desc: "Top deportivo sin costuras que se ajusta suavemente al cuerpo sin rozaduras. Ideal para gimnasio o yoga.",
         price: 85.00,
-        hasSizes: true,
         imgs: [
           "deportivos/top-seamless-1.jpg"
         ]
@@ -539,9 +533,9 @@
         id: 207,
         name: "Polera Oversize Power Gym",
         category: "gym",
-        desc: "Corte holgado de algodón premium para entrenar con total libertad.",
+        size: "L",
+        desc: "Polera de corte holgado en algodón suave para entrenar con total libertad de movimiento y estilo.",
         price: 80.00,
-        hasSizes: true,
         imgs: [
           "deportivos/oversize-gym-1.jpg"
         ]
@@ -550,9 +544,9 @@
         id: 208,
         name: "Polera Manga Larga Térmica Fit",
         category: "gym",
-        desc: "Ajuste deportivo elástico para entrenamientos en clima frío.",
+        size: "M",
+        desc: "Polera manga larga elástica y ajustada al cuerpo, pensada para entrenar o abrigarte en días frescos.",
         price: 95.00,
-        hasSizes: true,
         imgs: [
           "deportivos/manga-larga-fit-1.jpg"
         ]
@@ -561,9 +555,9 @@
         id: 209,
         name: "Chullo Tejido Con Pompón y Chiporro",
         category: "chullitos",
-        desc: "Lana gruesa suave con forro polar interno. No pica y abriga al máximo.",
+        size: "Estándar",
+        desc: "Chullo tejido grueso y suave con forro interno tipo chiporro. Abriga bastante sin picar.",
         price: 45.00,
-        hasSizes: false,
         imgs: [
           "chullos/chullo-chiporro-1.jpg"
         ]
@@ -572,9 +566,9 @@
         id: 210,
         name: "Chullo Urbano Beanie Unisex",
         category: "chullitos",
-        desc: "Estilo juvenil acanalado, combina con cualquier prenda de invierno.",
+        size: "Estándar",
+        desc: "Beanie unisex de tejido acanalado con estilo urbano, fácil de combinar con cualquier abrigo de invierno.",
         price: 35.00,
-        hasSizes: false,
         imgs: [
           "chullos/chullo-urbano-1.jpg"
         ]
@@ -583,9 +577,9 @@
         id: 211,
         name: "Combo Chullo + Cuellera Térmica",
         category: "chullitos",
-        desc: "Doble protección para cuello y orejas en días de frío.",
+        size: "Estándar",
+        desc: "Combo práctico de chullo y cuellera térmica para proteger cabeza, orejas y cuello en mañanas o noches frías.",
         price: 65.00,
-        hasSizes: false,
         imgs: [
           "chullos/combo-chullo-1.jpg"
         ]
@@ -594,9 +588,9 @@
         id: 212,
         name: "Mochila Deportiva Impermeable",
         category: "varios",
-        desc: "Amplia capacidad para llevar ropa de gym, cuadernos o viajes cortos.",
+        size: "",
+        desc: "Mochila resistente e impermeable con buen espacio para ropa de entrenamiento, cuadernos o salidas cortas.",
         price: 120.00,
-        hasSizes: false,
         imgs: [
           "varios/mochila-deportiva-1.jpg"
         ]
@@ -605,9 +599,9 @@
         id: 213,
         name: "Botella / Tomatodo Motivacional 1L",
         category: "varios",
-        desc: "Plástico resistente libre de BPA con cierre antiderrames.",
+        size: "",
+        desc: "Botella de 1 litro libre de BPA con cierre antiderrames, ideal para acompañarte en el gym o durante el día.",
         price: 45.00,
-        hasSizes: false,
         imgs: [
           "varios/tomatodo-1l-1.jpg"
         ]
@@ -616,9 +610,9 @@
         id: 214,
         name: "Pack x3 Medias Deportivas Algodón",
         category: "varios",
-        desc: "Talón y planta acolchada de alta durabilidad.",
+        size: "Estándar",
+        desc: "Pack de 3 pares de medias de algodón con talón y planta acolchados para mayor confort y duración.",
         price: 35.00,
-        hasSizes: false,
         imgs: [
           "varios/medias-pack-1.jpg"
         ]
@@ -627,9 +621,9 @@
         id: 215,
         name: "Cangurera Deportiva Multifunción",
         category: "varios",
-        desc: "Correa regulable y cierre seguro para celular, dinero y llaves.",
+        size: "",
+        desc: "Cangurera práctica con correa ajustable y cierres seguros para llevar celular, dinero o llaves con comodidad.",
         price: 55.00,
-        hasSizes: false,
         imgs: [
           "varios/cangurera-1.jpg"
         ]
@@ -639,13 +633,12 @@
     function getProductImages(p) {
       if (Array.isArray(p.imgs) && p.imgs.length > 0) return p.imgs;
       if (p.img) return [p.img];
-      return ["chamarras/rompevientos-1.jpg"];
+      return ["chamarras/azul-1.jpg"];
     }
 
     let cart = {};
     let activeCategory = 'all';
     let searchQuery = '';
-    let selectedModalSize = 'M';
     let modalPhotos = [];
     let modalPhotoIndex = 0;
 
@@ -653,8 +646,10 @@
       const container = document.getElementById('productGrid');
       const filtered = products.filter(p => {
         const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+        const sizeStr = (p.size || '').toLowerCase();
         const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              p.desc.toLowerCase().includes(searchQuery.toLowerCase());
+                              p.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              sizeStr.includes(searchQuery.toLowerCase());
         return matchesCat && matchesSearch;
       });
 
@@ -664,7 +659,7 @@
         container.innerHTML = `
           <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border border-pink-100">
             <i data-lucide="search-x" class="w-12 h-12 mx-auto stroke-1 mb-2 text-pink-300"></i>
-            <p class="font-bold text-sm text-slate-600">No encontramos prendas con ese nombre.</p>
+            <p class="font-bold text-sm text-slate-600">No encontramos prendas con ese nombre o talla.</p>
           </div>
         `;
         lucide.createIcons();
@@ -675,12 +670,13 @@
         const qty = cart[p.id] ? cart[p.id].qty : 0;
         const photos = getProductImages(p);
         const coverImg = photos[0];
-        const directWaLink = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', quiero consultar disponibilidad de: *' + p.name + '* (' + CONFIG.currency + ' ' + p.price.toFixed(2) + ').')}`;
+        const sizeLabel = p.size ? ` (Talla: ${p.size})` : '';
+        const directWaLink = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', quiero consultar disponibilidad de: *' + p.name + '*' + sizeLabel + ' (' + CONFIG.currency + ' ' + p.price.toFixed(2) + ').')}`;
 
         return `
           <div class="bg-white rounded-3xl border border-pink-100/80 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-200 flex flex-col justify-between group">
-            <div class="relative overflow-hidden cursor-pointer" onclick="openProductModal(${p.id})">
-              <img src="${coverImg}" alt="${p.name}" class="w-full h-44 md:h-52 object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+            <div class="relative bg-slate-950 overflow-hidden cursor-pointer" onclick="openProductModal(${p.id})">
+              <img src="${coverImg}" alt="${p.name}" class="w-full h-44 md:h-52 object-contain group-hover:scale-105 transition duration-300" loading="lazy">
               ${photos.length > 1 ? `
                 <span class="absolute bottom-2 left-2 bg-purple-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-1 rounded-lg">
                   ${photos.length} fotos
@@ -695,9 +691,13 @@
             </div>
 
             <div class="p-3.5 flex-1 flex flex-col justify-between space-y-2.5">
-              <div class="cursor-pointer" onclick="openProductModal(${p.id})">
-                <h3 class="font-extrabold text-xs md:text-sm text-slate-800 line-clamp-1 group-hover:text-pink-600 transition">${p.name}</h3>
-                <p class="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">${p.desc}</p>
+              <div class="cursor-pointer space-y-1.5" onclick="openProductModal(${p.id})">
+                <h3 class="font-extrabold text-xs md:text-sm text-slate-800 line-clamp-2 group-hover:text-pink-600 transition leading-snug">${p.name}</h3>
+                ${p.size ? `
+                  <div class="inline-flex items-center gap-1 bg-pink-50 border border-pink-200 text-pink-800 text-[11px] font-extrabold px-2 py-0.5 rounded-lg">
+                    <span>Talla: ${p.size}</span>
+                  </div>` : ''}
+                <p class="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">${p.desc}</p>
               </div>
 
               <div class="pt-1 border-t border-slate-100">
@@ -761,7 +761,6 @@
       const p = products.find(item => item.id === id);
       if (!p) return;
 
-      selectedModalSize = 'M';
       modalPhotos = getProductImages(p);
       modalPhotoIndex = 0;
       updateModalPhotoView();
@@ -770,14 +769,20 @@
       document.getElementById('modalPrice').innerText = `${CONFIG.currency} ${p.price.toFixed(2)}`;
       document.getElementById('modalDesc').innerText = p.desc;
 
-      const sizeSec = document.getElementById('modalSizeSection');
-      sizeSec.style.display = p.hasSizes ? 'block' : 'none';
-      selectSize('M');
+      const sizeBox = document.getElementById('modalSizeBadgeBox');
+      const sizeText = document.getElementById('modalSizeText');
+      if (p.size) {
+        sizeBox.classList.remove('hidden');
+        sizeText.innerText = p.size;
+      } else {
+        sizeBox.classList.add('hidden');
+      }
 
-      document.getElementById('modalDirectWa').href = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', quiero consultar sobre: *' + p.name + '*')}`;
+      const sizeMsg = p.size ? ` (Talla: ${p.size})` : '';
+      document.getElementById('modalDirectWa').href = `https://wa.me/${CONFIG.phone}?text=${encodeURIComponent('Hola ' + CONFIG.businessName + ', quiero consultar sobre: *' + p.name + '*' + sizeMsg)}`;
       
       document.getElementById('modalAddBtn').onclick = () => {
-        updateQty(p.id, 1, p.hasSizes ? selectedModalSize : null);
+        updateQty(p.id, 1);
         closeProductModal();
         toggleCart(true);
       };
@@ -790,18 +795,8 @@
       document.getElementById('productModal').classList.add('hidden');
     }
 
-    function selectSize(size) {
-      selectedModalSize = size;
-      document.querySelectorAll('.size-btn').forEach(btn => {
-        if (btn.dataset.size === size) {
-          btn.className = "size-btn flex-1 py-2 rounded-xl border-2 border-pink-600 bg-pink-50 text-xs font-extrabold text-pink-700";
-        } else {
-          btn.className = "size-btn flex-1 py-2 rounded-xl border border-pink-200 text-xs font-bold text-slate-700";
-        }
-      });
-    }
-
-    function updateQty(id, change, chosenSize = null) {
+    function updateQty(id, change) {
+      const prod = products.find(p => p.id === id);
       const currentQty = cart[id] ? cart[id].qty : 0;
       const nextQty = currentQty + change;
 
@@ -810,7 +805,7 @@
       } else {
         cart[id] = {
           qty: nextQty,
-          size: chosenSize || (cart[id] ? cart[id].size : 'Única')
+          size: prod && prod.size ? prod.size : ''
         };
       }
       renderProducts();
@@ -861,11 +856,11 @@
 
           return `
             <div class="flex items-center justify-between gap-3 p-2.5 rounded-2xl border border-pink-100 bg-white shadow-xs">
-              <img src="${thumb}" class="w-12 h-12 rounded-xl object-cover shrink-0">
+              <img src="${thumb}" class="w-12 h-12 rounded-xl object-contain bg-slate-950 shrink-0">
               <div class="flex-1 min-w-0">
                 <h4 class="font-extrabold text-xs text-slate-800 truncate">${prod.name}</h4>
                 <p class="text-[11px] text-slate-500">
-                  ${prod.hasSizes ? `<span class="text-pink-600 font-bold">Talla: ${data.size}</span> · ` : ''}
+                  ${prod.size ? `<span class="text-pink-600 font-bold">Talla: ${prod.size}</span> · ` : ''}
                   ${CONFIG.currency} ${prod.price.toFixed(2)} x ${data.qty} = <b class="text-purple-900">${CONFIG.currency} ${subtotal.toFixed(2)}</b>
                 </p>
               </div>
@@ -916,7 +911,7 @@
       if (method.includes('QR')) {
         notice.innerHTML = `Por tu seguridad, no publicamos códigos bancarios abiertos. Al enviar tu pedido, te confirmaremos el stock en el chat y te generaremos manualmente el <b>código QR con el monto exacto (${currentTotal})</b>.`;
       } else {
-        notice.innerHTML = `Tu pedido pasará a revisión personal en WhatsApp para confirmar stock de tallas y coordinar la entrega con <b>pago en efectivo (${currentTotal})</b>.`;
+        notice.innerHTML = `Tu pedido pasará a revisión personal en WhatsApp para confirmar disponibilidad y coordinar la entrega con <b>pago en efectivo (${currentTotal})</b>.`;
       }
     }
 
@@ -965,7 +960,7 @@
         if (prod) {
           const sub = prod.price * data.qty;
           total += sub;
-          const sizeTag = prod.hasSizes ? ` [Talla: ${data.size}]` : '';
+          const sizeTag = prod.size ? ` [Talla: ${prod.size}]` : '';
           msg += `▪️ *${data.qty}x* ${prod.name}${sizeTag} — *${CONFIG.currency} ${sub.toFixed(2)}*\n`;
         }
       });
